@@ -42,7 +42,7 @@ class AuthController
     $this->db->connect(); // add this line to establish a connection
 
     if ($this->db) {
-        $query = "insert into user (full_name, email, password, address, admin_id) values ('$user->full_name', '$user->email', '$user->password', '$user->address', 11)";
+        $query = "insert into user (full_name, email, password, address) values ('$user->full_name', '$user->email', '$user->password', '$user->address')";
         $result = $this->db->insert($query);
         if(!$result){
             #echo "Error in Query";
