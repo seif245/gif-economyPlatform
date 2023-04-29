@@ -31,6 +31,22 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
     $user->password = $_POST['password'];
     if (!$auth->login($user)) {
       $errMsg = 1;
+    } else {
+      #session_start();
+      if (session_status() == PHP_SESSION_ACTIVE) {
+        // session started
+        if ($_SESSION['$role_id'] == 1) {
+          header("Location: ../home/home.html");
+        } else {
+          header("Location: ../admin/admin.html");
+        }
+      } else {
+        // session not started
+        echo "session not started";
+      }
+
+
+      #header("Location: ../home/home.html");
     }
   }
 }

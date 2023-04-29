@@ -6,6 +6,7 @@ class User
     public $email;
     public $password;
     public $address;
+    public $role_id ;
 
 
 }
