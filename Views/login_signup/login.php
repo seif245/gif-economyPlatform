@@ -36,9 +36,9 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
       if (session_status() == PHP_SESSION_ACTIVE) {
         // session started
         if ($_SESSION['$role_id'] == 1) {
-          header("Location: ../home/home.html");
+          header("Location: ../home/home.php");
         } else {
-          header("Location: ../admin/admin.html");
+          header("Location: ../admin/admin.php");
         }
       } else {
         // session not started
