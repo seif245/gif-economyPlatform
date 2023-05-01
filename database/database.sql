@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 23, 2023 at 06:27 PM
+-- Generation Time: Apr 18, 2023 at 12:33 AM
 -- Server version: 10.4.28-MariaDB
--- PHP Version: 8.2.4
+-- PHP Version: 8.0.28
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -30,15 +30,17 @@ SET time_zone = "+00:00";
 CREATE TABLE `admin` (
   `a_id` int(11) NOT NULL,
   `a_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `a_account` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL
+  `a_account` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `password` varchar(50) NOT NULL,
+  `address` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `admin`
 --
 
-INSERT INTO `admin` (`a_id`, `a_name`, `a_account`) VALUES
-(11, 'noha', 'noah@g.org');
+INSERT INTO `admin` (`a_id`, `a_name`, `a_account`, `password`, `address`) VALUES
+(11, 'noha', 'noah@g.org', '1717', 'CA');
 
 -- --------------------------------------------------------
 
@@ -119,17 +121,20 @@ CREATE TABLE `user` (
   `u_id` int(11) NOT NULL,
   `full_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `email` varchar(50) NOT NULL,
-  `password` int(11) NOT NULL,
+  `password` varchar(20) NOT NULL,
   `address` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `admin_id` int(11) NOT NULL DEFAULT 11
+  `admin_id` int(11) NOT NULL DEFAULT 11,
+  `role_id` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`u_id`, `full_name`, `email`, `password`, `address`, `admin_id`) VALUES
-(1, 'seif', 'seif@me.org', 1234, 'CA', 11);
+INSERT INTO `user` (`u_id`, `full_name`, `email`, `password`, `address`, `admin_id`, `role_id`) VALUES
+(1, 'reem radwan', 'engineer.reem@yahoo.com', 'reem', 'abo ghaleb', 11, 1),
+(2, 'seif', 'seif@me.org', '1234', 'CA', 11, 1),
+(11, 'noah', 'noah@g.org', '1717', 'CA', 11, 2);
 
 --
 -- Indexes for dumped tables
@@ -184,9 +189,7 @@ ALTER TABLE `service`
 --
 ALTER TABLE `user`
   ADD PRIMARY KEY (`u_id`),
-  ADD KEY `admin_id` (`admin_id`),
-  ADD KEY `u_id` (`u_id`),
-  ADD KEY `u_id_2` (`u_id`);
+  ADD KEY `admin_id` (`admin_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -196,7 +199,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `admin`
 --
 ALTER TABLE `admin`
-  MODIFY `a_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `a_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `feedback`
@@ -227,6 +230,12 @@ ALTER TABLE `report`
 --
 ALTER TABLE `service`
   MODIFY `s_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `user`
+--
+ALTER TABLE `user`
+  MODIFY `u_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables
