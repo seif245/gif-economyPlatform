@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 6.0.0-dev
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Apr 18, 2023 at 12:33 AM
--- Server version: 10.4.28-MariaDB
--- PHP Version: 8.0.28
+-- Host: 192.168.30.23
+-- Generation Time: May 04, 2023 at 08:19 AM
+-- Server version: 8.0.18
+-- PHP Version: 8.2.5
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -31,8 +31,8 @@ CREATE TABLE `admin` (
   `a_id` int(11) NOT NULL,
   `a_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `a_account` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `password` varchar(50) NOT NULL,
-  `address` varchar(50) NOT NULL
+  `password` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `address` varchar(50) COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -120,11 +120,11 @@ CREATE TABLE `service` (
 CREATE TABLE `user` (
   `u_id` int(11) NOT NULL,
   `full_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `email` varchar(50) NOT NULL,
-  `password` varchar(20) NOT NULL,
+  `email` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `password` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
   `address` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `admin_id` int(11) NOT NULL DEFAULT 11,
-  `role_id` int(11) NOT NULL DEFAULT 1
+  `admin_id` int(11) NOT NULL DEFAULT '11',
+  `role_id` int(11) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -132,7 +132,7 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`u_id`, `full_name`, `email`, `password`, `address`, `admin_id`, `role_id`) VALUES
-(1, 'reem radwan', 'engineer.reem@yahoo.com', 'reem', 'abo ghaleb', 11, 1),
+(1, 'reem radwan', 'e.reem@yahoo.com', 'reem', 'CA', 11, 1),
 (2, 'seif', 'seif@me.org', '1234', 'CA', 11, 1),
 (11, 'noah', 'noah@g.org', '1717', 'CA', 11, 2);
 
@@ -199,7 +199,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `admin`
 --
 ALTER TABLE `admin`
-  MODIFY `a_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `a_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `feedback`
@@ -235,7 +235,7 @@ ALTER TABLE `service`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `u_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `u_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- Constraints for dumped tables
