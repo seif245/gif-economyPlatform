@@ -69,4 +69,14 @@ class DBController
             return true;
         }
     }
+    public function delete($query) {
+    $result = mysqli_query($this->conn, $query);
+    if (!$result) {
+        echo "Error in Query: " . mysqli_error($this->conn);
+        return false;
+    } else {
+        return true;
+    }
+}
+
 }

@@ -24,7 +24,7 @@ $errMsg = 0;
 if (isset($_POST['email']) && isset($_POST['password'])) {
   if (!empty($_POST['email']) && !empty($_POST['password'])) {
     $db = new DBController;
-    $user = new User;
+    $user = new User();
     $auth = new AuthController;
 
     $user->email = $_POST['email'];
@@ -54,7 +54,7 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
 if (isset($_POST['fullname']) && isset($_POST['location']) && isset($_POST['semail']) && isset($_POST['spass'])) {
   if (!empty($_POST['fullname']) && !empty($_POST['location']) && !empty($_POST['semail']) && !empty($_POST['spass'])) {
     $db = new DBController;
-    $user = new User;
+    $user = new User();
     $auth = new AuthController;
 
     $user->full_name = $_POST['fullname'];
