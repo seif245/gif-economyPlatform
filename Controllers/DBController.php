@@ -39,16 +39,16 @@ class DBController
     //     }
     // }
 
-    // public function closeCon()
-    // {
-    //     if (!$this->conn) {
-    //         die("Connection failed: " . mysqli_connect_error());
-    //     } else {
-    //         #echo "connected" ;
-    //     }
+    public function closeCon()
+    {
+        if (!$this->conn) {
+            die("Connection failed: " . mysqli_connect_error());
+        } else {
+            #echo "connected" ;
+        }
 
-    //     mysqli_close($this->conn);
-    // }
+        mysqli_close($this->conn);
+    }
 
     public function select($qry)
     {

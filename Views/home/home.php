@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once "../../Models/user.php";
+require_once "../../Models/service.php";
 require_once "../../Controllers/AuthController.php";
 require_once "../../Controllers/DBController.php";
 
@@ -17,6 +18,40 @@ if ($role_id == 2){
   $homeOrDa = '<a href="../admin/admin.php" class="w3-bar-item w3-button w3-padding-large w3-theme-d4"><i class="fa fa-home w3-margin-right"></i>Dashboard</a>';
 } else{
   $homeOrDa ='<a href="#" class="w3-bar-item w3-button w3-padding-large w3-theme-d4"><i class="fa fa-home w3-margin-right"></i>Home</a>' ;
+}
+$post = "" ;
+// if((isset($_POST['postBtn']))){
+//   header("Location: ../login_signup/login.php");
+//   $post=`<div class="w3-container w3-card w3-white w3-round w3-margin"><br>
+//   <img src="https://www.w3schools.com/w3images/avatar5.png" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
+//   <span class="w3-right w3-opacity">16 min</span>
+//   <h4>{$_SESSION['$full_name']}</h4><br>
+//   <hr class="w3-clear">
+//   <p>{$_POST['postD']}</p>
+//   <button type="button" class="w3-button w3-theme-d1 w3-margin-bottom"><i class="fa fa-thumbs-up"></i>  Like</button> 
+//   <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom"><i class="fa fa-comment"></i>  Comment</button> 
+// </div>` ;
+// }
+
+
+
+
+if (isset($_POST['postBtn'])) {
+  // check if the postD field is present and has a value
+  if (isset($_POST['postD']) && !empty($_POST['postD'])) {
+    // get the post text from the form
+    $postText = $_POST['postD'];
+
+    $srv = new Service ;
+    $srv->u_name = $_SESSION['$full_name'];
+    $srv->user_id = $_SESSION['$u_id'];
+    $srv->s_des = $_POST['postD'];
+    $srv->pushServiceToDatabase($srv) ;
+    // check if the insert was successful
+    
+  } else {
+    echo "Post text is required";
+  }
 }
 
 
@@ -162,18 +197,43 @@ html, body, h1, h2, h3, h4, h5 {font-family: "Open Sans", sans-serif}
     <!-- Middle Column -->
     <div class="w3-col m7">
     
+      
       <div class="w3-row-padding">
         <div class="w3-col m12">
           <div class="w3-card w3-round w3-white">
             <div class="w3-container w3-padding">
               <h6 class="w3-opacity">Social Media template by w3.css</h6>
-              <p contenteditable="true" class="w3-border w3-padding">Status: Feeling Blue</p>
-              <button type="button" class="w3-button w3-theme"><i class="fa fa-pencil"></i>  Post</button> 
+              <form action="home.php" method="post">
+              <textarea name="postD" class="form-control" id="exampleFormControlTextarea1" rows="3" cols="65"></textarea>
+              <button type="submit" name="postBtn" class="w3-button w3-theme"><i class="fa fa-pencil"></i>  Post</button> 
+              </form>
             </div>
           </div>
         </div>
       </div>
       
+      
+      <?php
+  // Call the getAllServices() function
+  $srv = new Service;
+  $services = $srv->getAllServices();
+  
+  // Loop through the returned data and display it
+  foreach ($services as $service) {
+    echo '<div class="w3-container w3-card w3-white w3-round w3-margin"><br>
+    <img src="https://www.w3schools.com/w3images/avatar5.png" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
+    <span class="w3-right w3-opacity">16 min</span>
+    <h4>'.$service['u_name'].'</h4><br>
+    <hr class="w3-clear">
+    <p>'.$service['s_des'].'</p>
+    <button type="button" class="w3-button w3-theme-d1 w3-margin-bottom"><i class="fa fa-thumbs-up"></i>  Like</button>
+    <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom"><i class="fa fa-comment"></i>  Comment</button>
+    </div>';
+  }
+?>
+
+
+
       <div class="w3-container w3-card w3-white w3-round w3-margin"><br>
         <img src="https://www.w3schools.com/w3images/avatar2.png" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
         <span class="w3-right w3-opacity">1 min</span>
