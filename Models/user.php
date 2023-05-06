@@ -34,6 +34,28 @@ public function deleteUser($id)
 }
 
 
+public function reloadUserData($id)
+{
+    $this->db = new DBController;
+    $this->db->connect();
+    $query = "SELECT * FROM user WHERE u_id = '$id'";
+    $result = $this->db->select($query);
+    if ($result) {
+        //store result in session variables
+        $_SESSION['$u_id'] = $result[0]['u_id']; // assuming the first row of the result contains the user data
+        $_SESSION['$full_name'] = $result[0]['full_name'];
+        $_SESSION['$email'] = $result[0]['email'];
+        $_SESSION['$pasword'] = $result[0]['password'];
+        $_SESSION['$address'] = $result[0]['address'];
+        $_SESSION['$role_id'] = $result[0]['role_id'];
+        return true;
+    } else {
+        return false;
+    }
+}
+
+
+
 
 
 }

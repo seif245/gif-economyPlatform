@@ -53,6 +53,7 @@ if (isset($_POST['submitUp'])) {
 	
 	
 	$user->updateUser($user);
+	$user->reloadUserData($user->u_id);
 
 	// Redirect to home page
 	
