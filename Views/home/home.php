@@ -217,7 +217,7 @@ html, body, h1, h2, h3, h4, h5 {font-family: "Open Sans", sans-serif}
   // Call the getAllServices() function
   $srv = new Service;
   $services = $srv->getAllServices();
-  
+  $services = array_reverse($services);
   // Loop through the returned data and display it
   foreach ($services as $service) {
     echo '<div class="w3-container w3-card w3-white w3-round w3-margin"><br>
