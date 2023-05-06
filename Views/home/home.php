@@ -214,22 +214,51 @@ html, body, h1, h2, h3, h4, h5 {font-family: "Open Sans", sans-serif}
       
       
       <?php
-  // Call the getAllServices() function
-  $srv = new Service;
-  $services = $srv->getAllServices();
-  $services = array_reverse($services);
-  // Loop through the returned data and display it
-  foreach ($services as $service) {
-    echo '<div class="w3-container w3-card w3-white w3-round w3-margin"><br>
-    <img src="https://www.w3schools.com/w3images/avatar5.png" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
-    <span class="w3-right w3-opacity">16 min</span>
-    <h4>'.$service['u_name'].'</h4><br>
-    <hr class="w3-clear">
-    <p>'.$service['s_des'].'</p>
-    <button type="button" class="w3-button w3-theme-d1 w3-margin-bottom"><i class="fa fa-thumbs-up"></i>  Like</button>
-    <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom"><i class="fa fa-comment"></i>  Comment</button>
-    </div>';
+$srv = new Service;
+$services = $srv->getAllServices();
+$services = array_reverse($services);
+
+foreach ($services as $service) {
+  $service_time = strtotime($service['s_time']);
+  $time_diff = 3600 - abs(time()- $service_time);
+
+  $time_ago = getTimeAgo($time_diff);
+  
+  echo '<div class="w3-container w3-card w3-white w3-round w3-margin"><br>
+  <img src="https://www.w3schools.com/w3images/avatar5.png" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
+  <span class="w3-right w3-opacity">'.$time_ago.'</span>
+  <h4>'.$service['u_name'].'</h4><br>
+  <hr class="w3-clear">
+  <p>'.$service['s_des'].'</p>
+  <button type="button" class="w3-button w3-theme-d1 w3-margin-bottom"><i class="fa fa-thumbs-up"></i>  Like</button>
+  <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom"><i class="fa fa-comment"></i>  Comment</button>
+  </div>';
+}
+
+function getTimeAgo($time_diff) {
+  if ($time_diff <= 10) {
+    return "just now";
+  } elseif ($time_diff < 60) {
+    return "less than a minute ago";
+  } elseif ($time_diff < 3600) {
+    $min = floor($time_diff / 60);
+    return $min . " min ago";
+  } elseif ($time_diff < 86400) {
+    $hour = floor($time_diff / 3600);
+    $timeAgo = $hour . " hour";
+    if ($hour > 1) {
+      $timeAgo .= "s";
+    }
+    return $timeAgo .= " ago";
+  } else {
+    $day = floor($time_diff / 86400);
+    $timeAgo = $day . " day";
+    if ($day > 1) {
+      $timeAgo .= "s";
+    }
+    return $timeAgo .= " ago";
   }
+}
 ?>
 
 

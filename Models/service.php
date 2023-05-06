@@ -7,6 +7,7 @@ class Service
     public $s_des;
     public $admin_id;
     public $user_id;
+    public $time ;
 
     public function pushServiceToDatabase(Service $sev) {
       // create a new instance of the DBController class and assign it to the $db property
@@ -14,8 +15,8 @@ class Service
   
       // connect to the database
       $this->db->connect();
-      $query = "INSERT INTO service (u_name, s_des, user_id)
-                VALUES ('$sev->u_name', '$sev->s_des', '$sev->user_id')";
+      $query = "INSERT INTO service (u_name, s_des, user_id, s_time)
+                VALUES ('$sev->u_name', '$sev->s_des', '$sev->user_id', NOW())";
                 
       $result = $this->db->insert($query);
   
