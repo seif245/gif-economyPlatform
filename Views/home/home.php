@@ -41,11 +41,28 @@ if (isset($_POST['postBtn'])) {
   if (isset($_POST['postD']) && !empty($_POST['postD'])) {
     // get the post text from the form
     $postText = $_POST['postD'];
+    $photo_path = null;
+    // check if a file was uploaded
+if (isset($_FILES["photo"]["name"]) && !empty($_FILES["photo"]["name"])) {
+
+  // store the path of the file
+  $photo_path = "../../imgs/" . $_FILES["photo"]["name"];
+  
+  // move the file to the uploads folder
+  move_uploaded_file($_FILES["photo"]["tmp_name"], $photo_path);
+
+  
+} else {
+  // set the path to be null if no photo was uploaded
+  $photo_path = null;
+}
+
 
     $srv = new Service ;
     $srv->u_name = $_SESSION['$full_name'];
     $srv->user_id = $_SESSION['$u_id'];
     $srv->s_des = $_POST['postD'];
+    $srv->s_img = $photo_path ;
     $srv->pushServiceToDatabase($srv) ;
     // check if the insert was successful
     
@@ -82,11 +99,40 @@ html, body, h1, h2, h3, h4, h5 {font-family: "Open Sans", sans-serif}
   <a href="#" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Account Settings"><i class="fa fa-user"></i></a>
   <a href="#" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Messages"><i class="fa fa-envelope"></i></a>
   <div class="w3-dropdown-hover w3-hide-small">
-    <button class="w3-button w3-padding-large" title="Notifications"><i class="fa fa-bell"></i><span class="w3-badge w3-right w3-small w3-green">3</span></button>     
+  <?php
+require_once "../../Controllers/DBController.php";
+require_once "../../Controllers/AuthController.php";
+require_once "../../Models/user.php";
+$notifs=new DBController();
+
+$user_id=$_SESSION['$u_id'];
+$notifs->connect();
+$query = "select * from notification where seen='0'and user='$user_id' ";
+$result = mysqli_query($notifs->connect(), $query); // execute the query and get the result object
+$num_rows = mysqli_num_rows($result); // get the number of rows returned by the query
+$row = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+?> 
+    <button class="w3-button w3-padding-large" title="Notifications"><i class="fa fa-bell"></i><span class="w3-badge w3-right w3-small w3-green"><?php echo $num_rows ?></span></button>     
     <div class="w3-dropdown-content w3-card-4 w3-bar-block" style="width:300px">
-      <a href="#" class="w3-bar-item w3-button">One new friend request</a>
+      <!-- <a href="#" class="w3-bar-item w3-button">One new friend request</a>
       <a href="#" class="w3-bar-item w3-button">John Doe posted on your wall</a>
-      <a href="#" class="w3-bar-item w3-button">Jane likes your post</a>
+      <a href="#" class="w3-bar-item w3-button">Jane likes your post</a> -->
+
+<?php
+foreach( $row as  $notif) { ?>
+
+  <a href="<?php  echo $notif['url'] ?>" class="w3-bar-item w3-button"> <?php  echo $notif['content']?>  </a>
+  <br>
+
+<?php }
+
+$query = "update notification set seen='1' where seen='0' and user='$user_id'";
+$notifs->insert($query);
+//$query="insert into notification (user,url,content,seen) values('1','http://www.youtube.com','hello world7','0')";
+//$notifs->insert($query);
+// $notifs->closeCon();
+?>
     </div>
   </div>
   <a href="../editProfile/index.php" class="w3-bar-item w3-button w3-hide-small w3-right w3-padding-large w3-hover-white" title="My Account">
@@ -205,7 +251,11 @@ html, body, h1, h2, h3, h4, h5 {font-family: "Open Sans", sans-serif}
               <h6 class="w3-opacity">Social Media template by w3.css</h6>
               <form action="home.php" method="post">
               <textarea name="postD" class="form-control" id="exampleFormControlTextarea1" rows="3" cols="65"></textarea>
-              <button type="submit" name="postBtn" class="w3-button w3-theme"><i class="fa fa-pencil"></i>  Post</button> 
+  
+   
+    <input type="file" name="photo" class="form-control-file" id="exampleFormControlFile1">
+
+              <button type="submit" name="postBtn" class="w3-button w3-theme" style="float: right;"><i class="fa fa-pencil"></i>  Post</button> 
               </form>
             </div>
           </div>
@@ -223,12 +273,22 @@ foreach ($services as $service) {
   $time_diff = 3600 - abs(time()- $service_time);
 
   $time_ago = getTimeAgo($time_diff);
-  
+  $photo = '<img src="'.$service['s_img'].'" style="width:100%" class="w3-margin-bottom">' ;
+// $photo = '';
+//   if(!empty($service['s_img']) ){
+//     $tmp_name = $service['s_img'];
+//    # $img_data = file_get_contents($tmp_name);
+//     #$b64_img = base64_encode($img_data);
+//     $photo = '<img src="data:image/jpeg;base64,'.$tmp_name.'" style="width:100%" class="w3-margin-bottom">';
+//   }
+
   echo '<div class="w3-container w3-card w3-white w3-round w3-margin"><br>
   <img src="https://www.w3schools.com/w3images/avatar5.png" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
   <span class="w3-right w3-opacity">'.$time_ago.'</span>
   <h4>'.$service['u_name'].'</h4><br>
-  <hr class="w3-clear">
+  <hr class="w3-clear">'.
+  $photo
+  .'
   <p>'.$service['s_des'].'</p>
   <button type="button" class="w3-button w3-theme-d1 w3-margin-bottom"><i class="fa fa-thumbs-up"></i>  Like</button>
   <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom"><i class="fa fa-comment"></i>  Comment</button>
@@ -358,7 +418,10 @@ function getTimeAgo($time_diff) {
 <!-- Footer -->
 <footer class="w3-container w3-theme-d3 w3-padding-16">
   <h5>Footer</h5>
+<a href="../both/save_form.php" class="footer-link me-4" target="_blank">Save your rights</a>
+
 </footer>
+
 
 <footer class="w3-container w3-theme-d5">
     <p>Powered by <a href="https://github.com/seif245" target="_blank">@auther Seif</a></p>
